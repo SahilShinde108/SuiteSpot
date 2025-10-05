@@ -1,0 +1,31 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+        <h3>My Listings</h3>
+        <p>Here are all the properties you have created.</p>
+    </div>
+</div>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <% if (myListings && myListings.length > 0) { %>
+        <% for(let listing of myListings) { %>
+            <a href="/listings/<%= listing.id %>" class="listing-link">
+                <div class="card col listing-card">
+                    <img src="<%= listing.image %>" class="card-img-top" alt="listing_image" style="height: 20rem;">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b><%= listing.title %></b> <br>
+                            &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
+                        </p>
+                    </div>
+                </div>
+            </a>
+        <% } %>
+    <% } else { %>
+        <div class="col-8 offset-2">
+            <p>You haven't created any listings yet. <a href="/listings/new">Create one now!</a></p>
+        </div>
+    <% } %>
+</div>

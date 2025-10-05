@@ -1,0 +1,89 @@
+<% layout("/layouts/boilerplate") %>
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+        <h3 class="mt-3 mb-2">Create a New Listing</h3>
+        <form action="/listings" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input name="listing[title]"type="text" class="form-control" placeholder="Add a catchy title" required>
+                <div class="valid-feedback">Title looks good!</div>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea name="listing[description]" class="form-control" required></textarea>
+                <div class="invalid-feedback">Please enter a short description</div>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Upload Listing Image</label>
+                <input name="listing[image]" type="file" class="form-control" required>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="price" class="form-label">Price</label>
+                    <input name="listing[price]" placeholder="1200" class="form-control" required>
+                    <div class="invalid-feedback">Price should be valid</div>
+                </div>
+                <div class="mb-3 col-md-8">
+                    <label for="country" class="form-label">Country</label>
+                    <input name="listing[country]" placeholder="India" type="text" class="form-control" required>
+                    <div class="invalid-feedback">Country name should be valid</div>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="capacity" class="form-label">Capacity</label>
+                    <input name="listing[capacity]" placeholder="4" type="number" class="form-control" required>
+                    <div class="invalid-feedback">Capacity should be a valid number</div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="festivalName" class="form-label">Festival Name (Optional)</label>
+                <input name="listing[festivalName]" placeholder="e.g., Coachella" type="text" class="form-control">
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="nearestLocation1" class="form-label">Nearest Location 1</label>
+                    <input name="listing[nearestLocation1]" placeholder="e.g., Airport" type="text" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="distance1" class="form-label">Distance 1</label>
+                    <input name="listing[distance1]" placeholder="e.g., 10" type="number" class="form-control" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="nearestLocation2" class="form-label">Nearest Location 2</label>
+                    <input name="listing[nearestLocation2]" placeholder="e.g., City Center" type="text" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="distance2" class="form-label">Distance 2 (in km)</label>
+                    <input name="listing[distance2]" placeholder="e.g., 5" type="number" class="form-control" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="nearestLocation3" class="form-label">Nearest Location 3 (Optional)</label>
+                    <input name="listing[nearestLocation3]" placeholder="e.g., Train Station" type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="distance3" class="form-label">Distance 3 (in km, Optional)</label>
+                    <input name="listing[distance3]" placeholder="e.g., 2" type="number" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="nearestLocation4" class="form-label">Nearest Location 4 (Optional)</label>
+                    <input name="listing[nearestLocation4]" placeholder="e.g., Bus Stop" type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="distance4" class="form-label">Distance 4 (in km, Optional)</label>
+                    <input name="listing[distance4]" placeholder="e.g., 1" type="number" class="form-control">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input name="listing[location]" placeholder="Nashik, Maharashtra" type="text" class="form-control" required>
+                <div class="invalid-feedback">Location should be valid</div>
+            </div>
+            <button class="btn btn-dark my-3 add-btn">Add</button>
+        </form>
+    </div>
+</div>

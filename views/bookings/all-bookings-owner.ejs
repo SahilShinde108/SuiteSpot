@@ -1,0 +1,41 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row">
+    <div class="col-10 offset-1">
+        <h3>Bookings for Your Listings</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Listing Title</th>
+                    <th scope="col">Guest Username</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Bill Amount</th>
+                    <th scope="col">Bill Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (allBookings && allBookings.length > 0) { %>
+                    <% allBookings.forEach((booking, index) => { %>
+                        <tr>
+                            <th scope="row"><%= index + 1 %></th>
+                            <td><%= booking.Listing.title %></td>
+                            <td><%= booking.guest.username %></td>
+                            <td><%= new Date(booking.startDate).toLocaleDateString() %></td>
+                            <td><%= new Date(booking.endDate).toLocaleDateString() %></td>
+                            <td>&#8377; <%= booking.totalPrice.toLocaleString("en-IN") %></td>
+                            <td>&#8377; <%= booking.Bill ? booking.Bill.amount.toLocaleString("en-IN") : 'N/A' %></td>
+                            <td><%= booking.Bill ? (booking.Bill.isPaid ? 'Paid' : 'Pending') : 'N/A' %></td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="8">No bookings found for your listings.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+<% layout("/layouts/boilerplate") %>
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+        <h3>Edit your Listing</h3>
+        <!-- FIX: Form action now uses listing.id -->
+        <form method="POST" action="/listings/<%= listing.id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control" required>
+                <div class="valid-feedback">Title looks good!</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
+                <div class="invalid-feedback">Please enter a short description</div>
+            </div>
+
+            <div class="mb-3">
+                Original Listing Image <br>
+                <!-- FIX: Changed listing.image.url to listing.image -->
+                <img src="<%= listing.image %>" style="height: 150px; width: auto;"/>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Upload New Image</label>
+                <input name="listing[image]" type="file" class="form-control">
+            </div>
+
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="price" class="form-label">Price</label>
+                    <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control" required>
+                    <div class="invalid-feedback">Price should be a valid number</div>
+                </div>
+    
+                <div class="mb-3 col-md-8">
+                    <label for="country" class="form-label">Country</label>
+                    <input name="listing[country]" value="<%= listing.country %>" type="text" class="form-control" required>
+                    <div class="invalid-feedback">Country name should be valid</div>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="capacity" class="form-label">Capacity</label>
+                    <input name="listing[capacity]" value="<%= listing.capacity %>" type="number" class="form-control" required>
+                    <div class="invalid-feedback">Capacity should be a valid number</div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="festivalName" class="form-label">Festival Name (Optional)</label>
+                <input name="listing[festivalName]" value="<%= listing.festivalName %>" type="text" class="form-control">
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="nearestLocation1" class="form-label">Nearest Location 1 (Optional)</label>
+                    <input name="listing[nearestLocation1]" value="<%= listing.nearestLocation1 %>" type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="distance1" class="form-label">Distance 1 (in km, Optional)</label>
+                    <input name="listing[distance1]" value="<%= listing.distance1 %>" type="number" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="nearestLocation2" class="form-label">Nearest Location 2 (Optional)</label>
+                    <input name="listing[nearestLocation2]" value="<%= listing.nearestLocation2 %>" type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="distance2" class="form-label">Distance 2 (in km, Optional)</label>
+                    <input name="listing[distance2]" value="<%= listing.distance2 %>" type="number" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="nearestLocation3" class="form-label">Nearest Location 3 (Optional)</label>
+                    <input name="listing[nearestLocation3]" value="<%= listing.nearestLocation3 %>" type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="distance3" class="form-label">Distance 3 (in km, Optional)</label>
+                    <input name="listing[distance3]" value="<%= listing.distance3 %>" type="number" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="nearestLocation4" class="form-label">Nearest Location 4 (Optional)</label>
+                    <input name="listing[nearestLocation4]" value="<%= listing.nearestLocation4 %>" type="text" class="form-control">
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="distance4" class="form-label">Distance 4 (in km, Optional)</label>
+                    <input name="listing[distance4]" value="<%= listing.distance4 %>" type="number" class="form-control">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input name="listing[location]" value="<%= listing.location %>" type="text" class="form-control" required>
+                <div class="invalid-feedback">Location should be valid</div>
+            </div>
+
+            <button class="btn btn-dark edit-btn mt-3">Update</button>
+        </form>
+    </div>
+</div>

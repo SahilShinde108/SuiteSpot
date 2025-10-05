@@ -1,0 +1,28 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+        <h3>Bill Details</h3>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Bill ID: <%= bill.id %></h5>
+                <p class="card-text"><b>Booking ID:</b> <%= bill.bookingId %></p>
+                <% if (bill.Booking && bill.Booking.Listing) { %>
+                    <p class="card-text"><b>Listing Title:</b> <%= bill.Booking.Listing.title %></p>
+                <% } %>
+                <p class="card-text"><b>Amount:</b> &#8377; <%= bill.amount.toLocaleString("en-IN") %></p>
+                <p class="card-text"><b>Issue Date:</b> <%= new Date(bill.issueDate).toLocaleDateString() %></p>
+                <p class="card-text"><b>Due Date:</b> <%= bill.dueDate ? new Date(bill.dueDate).toLocaleDateString() : 'N/A' %></p>
+                <p class="card-text"><b>Status:</b> <%= bill.status %></p>
+                <% if (bill.Booking) { %>
+                    <p class="card-text"><b>Booking Start Date:</b> <%= new Date(bill.Booking.startDate).toLocaleDateString() %></p>
+                    <p class="card-text"><b>Booking End Date:</b> <%= new Date(bill.Booking.endDate).toLocaleDateString() %></p>
+                <% } %>
+                <% if (bill.pdfPath) { %>
+                    <a href="<%= bill.pdfPath %>" class="btn btn-primary" target="_blank">Download PDF</a>
+                <% } %>
+                <a href="/billing" class="btn btn-secondary">Back to Bills</a>
+            </div>
+        </div>
+    </div>
+</div>
