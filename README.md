@@ -197,3 +197,6 @@ Here's a glimpse into the organized structure of SuiteSpot's data:
 ## 🤝 Contribute to SuiteSpot
 
 We welcome your creativity and expertise! If you find a bug, have a brilliant idea, or want to enhance SuiteSpot, please don't hesitate to submit a pull request or open an issue. Let's build something amazing together!
+
+## Author
+Sahil Shinde
