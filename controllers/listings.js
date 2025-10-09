@@ -68,7 +68,10 @@ module.exports = {
             allListings = availableListings;
         }
             
-        return res.render("listings/index.ejs", { allListings, query: req.query });
+        const cities = [...new Set((await Listing.findAll({ attributes: ['location'], raw: true })).map(l => l.location.split(',')[0].trim()))];
+        const festivals = [...new Set((await Listing.findAll({ attributes: ['festivalName'], raw: true })).map(l => l.festivalName))];
+        
+        return res.render("listings/index.ejs", { allListings, query: req.query, cities, festivals });
     },
 
     renderNewForm: (req, res) => {

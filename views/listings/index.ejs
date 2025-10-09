@@ -39,6 +39,61 @@
     }
 </style>
 
+<div id="carouselExampleCaptions" class="carousel slide mb-3" data-bs-ride="carousel" style="border-radius: 15px; overflow: hidden;">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4" aria-label="Slide 5"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://images.news9live.com/wp-content/uploads/2025/01/mahakumbh-final-day-feb-26-6.jpg" class="d-block w-100" alt="Mahakumbh Nashik 1" style="height: 300px; object-fit: cover;">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Nashik Mahakumbh</h5>
+                <p>"Where faith flows eternal, and devotion finds its purest form."</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="https://www.hindustantimes.com/ht-img/img/2025/01/13/original/prayagraj_maha_kumbh_1736743787205.jfif" class="d-block w-100" alt="Mahakumbh Nashik 2" style="height: 300px; object-fit: cover;">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>A Sacred Gathering</h5>
+                <p>"In the confluence of rivers, souls find their liberation."</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="https://www.epicyatra.com/wp-content/uploads/2024/09/Kumbh-Mela.webp" class="d-block w-100" alt="Mahakumbh Nashik 3" style="height: 300px; object-fit: cover;">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Spiritual Awakening</h5>
+                <p>"Every dip in the holy waters washes away sins and renews the spirit."</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="https://www.kumbhcampindia.com/wp-content/uploads/2024/10/kumbhmela.jpg" class="d-block w-100" alt="Mahakumbh Nashik 4" style="height: 300px; object-fit: cover;">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Unity in Diversity</h5>
+                <p>"Millions unite, a testament to unwavering faith and cultural heritage."</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="https://awadh360.com/assets/img/articles/202408211024IMG_7327.jpeg" class="d-block w-100" alt="Mahakumbh Nashik 5" style="height: 300px; object-fit: cover;">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Divine Blessings</h5>
+                <p>"Experience the divine grace and spiritual energy of Mahakumbh."</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
 <div id="filters ms-5">
     <form action="/listings" method="GET" class="row g-3 align-items-center mb-3 mt-3">
         <div class="col-md-2">
@@ -51,11 +106,21 @@
         </div>
         <div class="col-md-2">
             <label for="city" class="form-label">City</label>
-            <input type="text" class="form-control" id="city" name="city" placeholder="e.g., Nashik" value="<%= typeof query !== 'undefined' ? query.city : '' %>">
+            <select class="form-select" id="city" name="city">
+                <option value="">All</option>
+                <% cities.forEach(city => { %>
+                    <option value="<%= city %>" <%= (typeof query !== 'undefined' && query.city === city) ? 'selected' : '' %>><%= city %></option>
+                <% }); %>
+            </select>
         </div>
         <div class="col-md-3">
             <label for="festivalName" class="form-label">Festival</label>
-            <input type="text" class="form-control" id="festivalName" name="festivalName" placeholder="e.g., Kumbh Mela" value="<%= typeof query !== 'undefined' ? query.festivalName : '' %>">
+            <select class="form-select" id="festivalName" name="festivalName">
+                <option value="">All</option>
+                <% festivals.forEach(festival => { %>
+                    <option value="<%= festival %>" <%= (typeof query !== 'undefined' && query.festivalName === festival) ? 'selected' : '' %>><%= festival %></option>
+                <% }); %>
+            </select>
         </div>
         <div class="col-md-2 mt-5">
             <button type="submit" class="btn btn-danger w-100">Search</button>
@@ -71,6 +136,8 @@
         </div>
     </div> -->
 </div>
+
+
 
 <div class="row row-cols-1 mt-3">
     <% for(let listing of allListings) { %>
