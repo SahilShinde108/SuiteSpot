@@ -14,6 +14,15 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="rejected-tab" data-bs-toggle="tab" data-bs-target="#rejected" type="button" role="tab" aria-controls="rejected" aria-selected="false">Rejected (<%= rejectedListings.length %>)</button>
             </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="owners-tab" data-bs-toggle="tab" data-bs-target="#owners" type="button" role="tab" aria-controls="owners" aria-selected="false">Owners</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="customers-tab" data-bs-toggle="tab" data-bs-target="#customers" type="button" role="tab" aria-controls="customers" aria-selected="false">Customers</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="bookings-tab" data-bs-toggle="tab" data-bs-target="#bookings" type="button" role="tab" aria-controls="bookings" aria-selected="false">Bookings</button>
+            </li>
         </ul>
 
         <div class="tab-content" id="adminTabsContent">
@@ -79,6 +88,75 @@
                 <% } else { %>
                     <p>No rejected listings.</p>
                 <% } %>
+            </div>
+            <div class="tab-pane fade" id="owners" role="tabpanel" aria-labelledby="owners-tab">
+                <h4>Owners</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let user of allUsers) { %>
+                            <% if (user.role === 'owner') { %>
+                                <tr>
+                                    <td><%= user.username %></td>
+                                    <td><%= user.email %></td>
+                                </tr>
+                            <% } %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="customers" role="tabpanel" aria-labelledby="customers-tab">
+                <h4>Customers</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let user of allUsers) { %>
+                            <% if (user.role === 'customer') { %>
+                                <tr>
+                                    <td><%= user.username %></td>
+                                    <td><%= user.email %></td>
+                                </tr>
+                            <% } %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="bookings" role="tabpanel" aria-labelledby="bookings-tab">
+                <h4>All Bookings</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Listing Title</th>
+                            <th>Guest Username</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Total Price</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let booking of allBookings) { %>
+                            <tr>
+                                <td><%= booking.Listing.title %></td>
+                                <td><%= booking.guest.username %></td>
+                                <td><%= booking.startDate.toLocaleDateString() %></td>
+                                <td><%= booking.endDate.toLocaleDateString() %></td>
+                                <td>&#8377; <%= booking.totalPrice.toLocaleString("en-IN") %></td>
+                                <td><%= booking.status %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

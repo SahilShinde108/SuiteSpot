@@ -1,0 +1,39 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+        <h3>Booking Details</h3>
+        <% if (booking) { %>
+            <div class="card">
+                <div class="card-header">
+                    Booking ID: <%= booking.id %>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Listing: <%= booking.Listing.title %></h5>
+                    <p class="card-text"><strong>Location:</strong> <%= booking.Listing.location %></p>
+                    <p class="card-text"><strong>Guest:</strong> <%= booking.guest.username %></p>
+                    <p class="card-text"><strong>Check-in Date:</strong> <%= new Date(booking.startDate).toLocaleDateString() %></p>
+                    <p class="card-text"><strong>Check-out Date:</strong> <%= new Date(booking.endDate).toLocaleDateString() %></p>
+                    <p class="card-text"><strong>Total Price:</strong> &#8377; <%= booking.totalPrice.toLocaleString("en-IN") %></p>
+                    <p class="card-text"><strong>Status:</strong> <%= booking.status %></p>
+
+                    <% if (booking.Bill) { %>
+                        <hr>
+                        <h6>Associated Bill:</h6>
+                        <p class="card-text"><strong>Bill ID:</strong> <%= booking.Bill.id %></p>
+                        <p class="card-text"><strong>Amount:</strong> &#8377; <%= booking.Bill.amount.toLocaleString("en-IN") %></p>
+                        <p class="card-text"><strong>Issue Date:</strong> <%= new Date(booking.Bill.issueDate).toLocaleDateString() %></p>
+                        <p class="card-text"><strong>Due Date:</strong> <%= new Date(booking.Bill.dueDate).toLocaleDateString() %></p>
+                        <p class="card-text"><strong>Bill Status:</strong> <%= booking.Bill.status %></p>
+                        <a href="/billing/<%= booking.Bill.id %>/generate-pdf" class="btn btn-success mt-2" target="_blank">Generate Bill PDF</a>
+                    <% } %>
+                </div>
+                <div class="card-footer">
+                    <a href="/bookings/my-bookings" class="btn btn-secondary">Back to My Bookings</a>
+                </div>
+            </div>
+        <% } else { %>
+            <p>Booking not found.</p>
+        <% } %>
+    </div>
+</div>

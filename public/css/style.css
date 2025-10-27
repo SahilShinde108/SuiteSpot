@@ -191,3 +191,44 @@ img {
     width: 70%; /* Adjust as needed */
     padding: 1rem;
 }
+
+/* Bill Cards */
+.bill-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+}
+
+.bill-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bill-card .card-body {
+    padding: 1.5rem;
+}
+
+.bill-card .card-title {
+    color: #fe424d;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.bill-card .card-text b {
+    color: #333;
+}
+
+.bill-card .btn {
+    margin-right: 0.5rem;
+}
+
+.bill-card .btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.bill-card .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}

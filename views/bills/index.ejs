@@ -6,39 +6,27 @@
         <% if (bills.length === 0) { %>
             <p>No bills found.</p>
         <% } else { %>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Bill ID</th>
-                        <th scope="col">Booking ID</th>
-                        <th scope="col">Listing Title</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Issue Date</th>
-                        <th scope="col">Due Date</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for(let bill of bills) { %>
-                        <tr>
-                            <td><%= bill.id %></td>
-                            <td><%= bill.bookingId %></td>
-                            <td><%= bill.Booking ? bill.Booking.Listing.title : 'N/A' %></td>
-                            <td>&#8377; <%= bill.amount.toLocaleString("en-IN") %></td>
-                            <td><%= new Date(bill.issueDate).toLocaleDateString() %></td>
-                            <td><%= bill.dueDate ? new Date(bill.dueDate).toLocaleDateString() : 'N/A' %></td>
-                            <td><%= bill.status %></td>
-                            <td>
-                                <a href="/billing/<%= bill.id %>" class="btn btn-sm btn-info">View</a>
-                                <% if (bill.pdfPath) { %>
-                                    <a href="<%= bill.pdfPath %>" class="btn btn-sm btn-secondary" target="_blank">Download PDF</a>
-                                <% } %>
-                            </td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <% for(let bill of bills) { %>
+                    <div class="col">
+                        <div class="card h-100 bill-card">
+                            <div class="card-body m-3">
+                                <h5 class="card-title">Bill ID: <%= bill.id %></h5>
+                                <p class="card-text"><b>Booking ID:</b> <%= bill.bookingId %></p>
+                                <p class="card-text"><b>Listing Title:</b> <%= bill.Booking ? bill.Booking.Listing.title : 'N/A' %></p>
+                                <p class="card-text"><b>Amount:</b> &#8377; <%= bill.amount.toLocaleString("en-IN") %></p>
+                                <p class="card-text"><b>Issue Date:</b> <%= new Date(bill.issueDate).toLocaleDateString() %></p>
+                                <p class="card-text"><b>Due Date:</b> <%= bill.dueDate ? new Date(bill.dueDate).toLocaleDateString() : 'N/A' %></p>
+                                <!-- <p class="card-text"><b>Status:</b> <%= bill.status %></p> -->
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <a href="/billing/<%= bill.id %>" class="btn btn-sm btn-info">View Details</a>
+                                    <a href="/billing/<%= bill.id %>/generate-pdf" class="btn btn-sm btn-success" target="_blank">Generate PDF</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
         <% } %>
     </div>
 </div>

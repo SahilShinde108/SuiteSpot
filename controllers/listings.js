@@ -3,6 +3,7 @@ const User = require('../models/user.js');
 const Listing = require('../models/listing.js');
 const Review = require('../models/review.js');
 const Booking = require('../models/booking.js');
+const sequelize = require('sequelize');
 
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapToken = process.env.MAP_TOKEN;
@@ -14,7 +15,7 @@ const { Op } = require('sequelize');
 
 module.exports = {
     index: async (req, res) => {
-        const { startDate, endDate, city, festivalName } = req.query;
+        const { startDate, endDate, city, festivalName, nearestLocation } = req.query;
         let allListings;
         
         const whereClause = {
@@ -29,8 +30,31 @@ module.exports = {
             whereClause.festivalName = { [Op.like]: `%${festivalName}%` };
         }
 
+        if (nearestLocation) {
+            whereClause[Op.or] = [
+                { nearestLocation1: nearestLocation },
+                { nearestLocation2: nearestLocation },
+                { nearestLocation3: nearestLocation },
+                { nearestLocation4: nearestLocation }
+            ];
+        }
+
+        let orderClause = [];
+        if (nearestLocation) {
+            orderClause = [
+                [sequelize.literal(`CASE
+                    WHEN nearestLocation1 = '${nearestLocation}' THEN distance1
+                    WHEN nearestLocation2 = '${nearestLocation}' THEN distance2
+                    WHEN nearestLocation3 = '${nearestLocation}' THEN distance3
+                    WHEN nearestLocation4 = '${nearestLocation}' THEN distance4
+                    ELSE NULL
+                END`), 'ASC']
+            ];
+        }
+
         allListings = await Listing.findAll({
-            where: whereClause
+            where: whereClause,
+            order: orderClause
         });
 
         if (startDate && endDate) {
@@ -71,7 +95,14 @@ module.exports = {
         const cities = [...new Set((await Listing.findAll({ attributes: ['location'], raw: true })).map(l => l.location.split(',')[0].trim()))];
         const festivals = [...new Set((await Listing.findAll({ attributes: ['festivalName'], raw: true })).map(l => l.festivalName))];
         
-        return res.render("listings/index.ejs", { allListings, query: req.query, cities, festivals });
+        const nearestLocations = [...new Set(
+            (await Listing.findAll({ attributes: ['nearestLocation1', 'nearestLocation2', 'nearestLocation3', 'nearestLocation4'], raw: true }))
+                .flatMap(l => [l.nearestLocation1, l.nearestLocation2, l.nearestLocation3, l.nearestLocation4])
+                .filter(location => location && location.trim() !== '') // Filter out null, undefined, and empty strings
+                .map(location => location.trim()) // Trim whitespace
+        )];
+
+        return res.render("listings/index.ejs", { allListings, query: req.query, cities, festivals, nearestLocations });
     },
 
     renderNewForm: (req, res) => {
@@ -173,6 +204,13 @@ module.exports = {
         const pendingListings = await Listing.findAll({ where: { status: 'pending' } });
         const approvedListings = await Listing.findAll({ where: { status: 'approved' } });
         const rejectedListings = await Listing.findAll({ where: { status: 'rejected' } });
-        res.render('listings/admin-dashboard.ejs', { pendingListings, approvedListings, rejectedListings });
+        const allUsers = await User.findAll();
+        const allBookings = await Booking.findAll({
+            include: [
+                { model: Listing, as: 'Listing' },
+                { model: User, as: 'guest' }
+            ]
+        });
+        res.render('listings/admin-dashboard.ejs', { pendingListings, approvedListings, rejectedListings, allUsers, allBookings });
     }
 };

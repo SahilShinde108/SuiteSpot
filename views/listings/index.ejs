@@ -105,14 +105,13 @@
             <input type="date" class="form-control" id="endDate" name="endDate" value="<%= typeof query !== 'undefined' ? query.endDate : '' %>">
         </div>
         <div class="col-md-2">
-            <label for="city" class="form-label">City</label>
-            <select class="form-select" id="city" name="city">
-                <option value="">All</option>
-                <% cities.forEach(city => { %>
-                    <option value="<%= city %>" <%= (typeof query !== 'undefined' && query.city === city) ? 'selected' : '' %>><%= city %></option>
-                <% }); %>
-            </select>
-        </div>
+             <label for="city" class="form-label">City</label>
+             <select class="form-select" id="city" name="city">
+                 <option value="">All</option>
+                 <option value="Nashik" <%= (typeof query !== 'undefined' && query.city === 'Nashik') ? 'selected' : '' %>>Nashik</option>
+                 <option value="Prayagraj" <%= (typeof query !== 'undefined' && query.city === 'Prayagraj') ? 'selected' : '' %>>Prayagraj</option>
+             </select>
+         </div>
         <div class="col-md-3">
             <label for="festivalName" class="form-label">Festival</label>
             <select class="form-select" id="festivalName" name="festivalName">
@@ -120,6 +119,17 @@
                 <% festivals.forEach(festival => { %>
                     <option value="<%= festival %>" <%= (typeof query !== 'undefined' && query.festivalName === festival) ? 'selected' : '' %>><%= festival %></option>
                 <% }); %>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="nearestLocation" class="form-label">Nearest Location</label>
+            <select class="form-select" id="nearestLocation" name="nearestLocation">
+                <option value="">All</option>
+                <% if (typeof nearestLocations !== 'undefined') { %>
+                    <% nearestLocations.forEach(location => { %>
+                        <option value="<%= location %>" <%= (typeof query !== 'undefined' && query.nearestLocation === location) ? 'selected' : '' %>><%= location %></option>
+                    <% }); %>
+                <% } %>
             </select>
         </div>
         <div class="col-md-2 mt-5">
@@ -142,57 +152,50 @@
 <div class="row row-cols-1 mt-3">
     <% for(let listing of allListings) { %>
         <a href="/listings/<%= listing.id %>" class="listing-link">
-            <div class="card listing-card d-flex flex-row my-3">
+            <div class="card listing-card d-flex flex-row my-3 border rounded shadow">
                 <img src="<%= listing.image %>" class="card-img-left" alt="listing_image" style="height: 22rem;">
-                <div class="card-body " style="margin-left: 5rem;">
-                    <p class="card-text">
-                    <b><%= listing.title %></b> <br></p>
-                    <p class="card-text"></p>&#8377; <%= listing.price.toLocaleString("en-IN") %> / night
-                    <i class="tax-info"> &nbsp; &nbsp;+18% GST</i>
-                    </p>
-                    <!-- <p class="card-text"><%= listing.description %></p> -->
-                    <p class="card-text"><%= listing.location %></p>
-                    <p class="card-text"><%= listing.country %></p>
-                    <p class="card-text"><b>Capacity:</b> <%= listing.capacity %></p>
-                    <% if (listing.festivalName) { %>
-                        <p class="card-text"><b>Festival Name:</b> <%= listing.festivalName %></p>
-                    <% } %>
-        
-                    <% if (listing.nearestLocation1 && listing.distance1) { %>
-                        <p class="card-text"><b>Nearest Location 1:</b> <%= listing.nearestLocation1 %> (<%= listing.distance1 %> km)</p>
-                    <% } %>
-                    <% if (listing.nearestLocation2 && listing.distance2) { %>
-                        <p class="card-text"><b>Nearest Location 2:</b> <%= listing.nearestLocation2 %> (<%= listing.distance2 %> km)</p>
-                    <% } %>
-                    <% if (listing.nearestLocation3 && listing.distance3) { %>
-                        <p class="card-text"><b>Nearest Location 3:</b> <%= listing.nearestLocation3 %> (<%= listing.distance3 %> km)</p>
-                    <% } %>
-                    <% if (listing.nearestLocation4 && listing.distance4) { %>
-                        <p class="card-text"><b>Nearest Location 4:</b> <%= listing.nearestLocation4 %> (<%= listing.distance4 %> km)</p>
-                    <% } %>
-                </div>
-                <div class="card-body" sty>
-                    <button class="btn btn-success">Book Now</button>
+                <div class="card-body d-flex flex-column p-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="card-text">
+                            <b><%= listing.title %></b> <br></p>
+                            <p class="card-text"></p>&#8377; <%= listing.price.toLocaleString("en-IN") %> / night
+                            <i class="tax-info"> &nbsp; &nbsp;+18% GST</i>
+                            </p>
+                            <!-- <p class="card-text"><%= listing.description %></p> -->
+                            <p class="card-text"><%= listing.location %></p>
+                            <p class="card-text"><%= listing.country %></p>
+                            <p class="card-text"><b>Capacity:</b> <%= listing.capacity %></p>
+                        </div>
+                        <div>
+                            <% if (listing.festivalName) { %>
+                                <p class="card-text"><b>Festival Name:</b> <%= listing.festivalName %></p>
+                            <% } %>
+                        
+                            <% if (listing.nearestLocation1 && listing.distance1) { %>
+                                <p class="card-text"><b>Nearest Location 1:</b> <%= listing.nearestLocation1 %> (<%= listing.distance1 %> km)</p>
+                            <% } %>
+                            <% if (listing.nearestLocation2 && listing.distance2) { %>
+                                <p class="card-text"><b>Nearest Location 2:</b> <%= listing.nearestLocation2 %> (<%= listing.distance2 %> km)</p>
+                            <% } %>
+                            <% if (listing.nearestLocation3 && listing.distance3) { %>
+                                <p class="card-text"><b>Nearest Location 3:</b> <%= listing.nearestLocation3 %> (<%= listing.distance3 %> km)</p>
+                            <% } %>
+                            <% if (listing.nearestLocation4 && listing.distance4) { %>
+                                <p class="card-text"><b>Nearest Location 4:</b> <%= listing.nearestLocation4 %> (<%= listing.distance4 %> km)</p>
+                            <% } %>
+                             <div>
+                            <button class="btn btn-success">Book Now</button>
+                        </div>
+                        </div>
+                       
+                    </div>
                 </div>
             </div>
         </a>
-        <hr>
+        <!-- <hr> -->
     <% } %>
 </div>
-
-<script>
-    const taxSwitch = document.getElementById("flexSwitchCheckDefault");
-    taxSwitch.addEventListener("click", () => {
-        let taxInfo = document.getElementsByClassName("tax-info");
-        for(info of taxInfo) {
-            if(info.style.display !== "inline") {
-                info.style.display = "inline";
-            } else {
-                info.style.display = "none";
-            }
-        }
-    });
-</script>
 
 <script>
     document.getElementById('clearFilters').addEventListener('click', () => {

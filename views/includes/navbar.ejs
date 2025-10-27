@@ -32,7 +32,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
+            <div class="navbar-nav" style="font-size: 1.2rem;">
                 <a class="nav-link" href="/listings">SuiteSpot</a>
             </div>
             <div class="navbar-nav ms-auto">
@@ -41,13 +41,13 @@
                 <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
               </form>
               
-              <script>
+              <!-- <script>
                 document.getElementById('searchInput').addEventListener('input', function() {
                   if (this.value === '') {
                     window.location.href = '/listings';
                   }
                 });
-              </script>
+              </script> -->
             </div>
             <div class="navbar-nav ms-auto">
                 <% if(!currUser) { %>
