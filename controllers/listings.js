@@ -3,6 +3,7 @@ const User = require('../models/user.js');
 const Listing = require('../models/listing.js');
 const Review = require('../models/review.js');
 const Booking = require('../models/booking.js');
+const Bill = require('../models/bill.js'); // Import the Bill model
 const sequelize = require('sequelize');
 
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
@@ -201,16 +202,62 @@ module.exports = {
     },
 
     adminDashboard: async (req, res) => {
+        const { searchOwner, searchCustomer, tab } = req.query;
+        let allUsers = await User.findAll({
+            include: [
+                { model: Listing, as: 'Listings' }, // Include listings owned by the user
+                { model: Booking, as: 'Bookings', include: [Listing, { model: User, as: 'guest' }] }, // Include bookings made by the user
+                { model: Bill, as: 'Bills', include: [{ model: Booking, include: [Listing] }] }, // Include bills associated with the user
+                { model: Review, as: 'Reviews' } // Include reviews written by the user
+            ]
+        });
+        let allBookings = await Booking.findAll({
+            include: [Listing, { model: User, as: 'guest' }]
+        });
+    
+        let filteredOwners = allUsers.filter(user => user.role === 'owner');
+        let filteredCustomers = allUsers.filter(user => user.role === 'customer');
+    
+        if (searchOwner && searchOwner.trim() !== '') {
+            const searchTerm = searchOwner.toLowerCase();
+            filteredOwners = filteredOwners.filter(owner =>
+                owner.username.toLowerCase().includes(searchTerm) ||
+                owner.email.toLowerCase().includes(searchTerm)
+            );
+        } else if (searchOwner === '') {
+            filteredOwners = [];
+        }
+    
+        if (searchCustomer && searchCustomer.trim() !== '') {
+            const searchTerm = searchCustomer.toLowerCase();
+            filteredCustomers = filteredCustomers.filter(customer =>
+                customer.username.toLowerCase().includes(searchTerm) ||
+                customer.email.toLowerCase().includes(searchTerm)
+            );
+        } else if (searchCustomer === '') {
+            filteredCustomers = [];
+        }
+    
         const pendingListings = await Listing.findAll({ where: { status: 'pending' } });
         const approvedListings = await Listing.findAll({ where: { status: 'approved' } });
         const rejectedListings = await Listing.findAll({ where: { status: 'rejected' } });
-        const allUsers = await User.findAll();
-        const allBookings = await Booking.findAll({
-            include: [
-                { model: Listing, as: 'Listing' },
-                { model: User, as: 'guest' }
-            ]
+    
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            if (tab === 'owners') {
+                return res.json({ filteredOwners });
+            } else if (tab === 'customers') {
+                return res.json({ filteredCustomers });
+            }
+        }
+    
+        res.render("listings/admin-dashboard.ejs", {
+            pendingListings,
+            approvedListings,
+            rejectedListings,
+            filteredOwners,
+            filteredCustomers,
+            allBookings,
+            query: req.query
         });
-        res.render('listings/admin-dashboard.ejs', { pendingListings, approvedListings, rejectedListings, allUsers, allBookings });
     }
 };

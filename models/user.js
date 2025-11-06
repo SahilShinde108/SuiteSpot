@@ -32,4 +32,23 @@ const User = sequelize.define('User', {
     tableName: 'users'
 });
 
+User.associate = (models) => {
+    User.hasMany(models.Listing, {
+        foreignKey: 'owner',
+        as: 'Listings' // Use 'Listings' as the alias
+    });
+    User.hasMany(models.Booking, {
+        foreignKey: 'guest',
+        as: 'Bookings' // Use 'Bookings' as the alias
+    });
+    User.hasMany(models.Bill, {
+        foreignKey: 'userId',
+        as: 'Bills' // Use 'Bills' as the alias
+    });
+    User.hasMany(models.Review, {
+        foreignKey: 'author',
+        as: 'Reviews' // Use 'Reviews' as the alias
+    });
+};
+
 module.exports = User;

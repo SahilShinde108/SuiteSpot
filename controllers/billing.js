@@ -1,6 +1,7 @@
 const Bill = require('../models/bill');
 const Booking = require('../models/booking');
 const Listing = require('../models/listing');
+const User = require('../models/user'); // Import the User model
 const PDFDocument = require('pdfkit');
 
 module.exports.showBills = async (req, res) => {
@@ -56,6 +57,9 @@ module.exports.generatePdfBill = async (req, res) => {
                 model: Listing,
                 attributes: ['title', 'location']
             }]
+        }, {
+            model: User, // Include the User model
+            attributes: ['username', 'email'] // Specify the attributes you want
         }],
     });
 
@@ -83,6 +87,12 @@ module.exports.generatePdfBill = async (req, res) => {
     doc.fontSize(16).text(`Bill ID: ${bill.id}`);
     doc.text(`Issue Date: ${bill.issueDate.toLocaleDateString()}`);
     doc.text(`Due Date: ${bill.dueDate.toLocaleDateString()}`);
+    doc.moveDown();
+
+    // Add User Information
+    doc.fontSize(18).text('Billed To:');
+    doc.fontSize(14).text(`Username: ${bill.User.username}`);
+    doc.text(`Email: ${bill.User.email}`);
     doc.moveDown();
 
     doc.fontSize(18).text('Booking Details:');
