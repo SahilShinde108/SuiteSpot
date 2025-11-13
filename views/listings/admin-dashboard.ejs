@@ -246,12 +246,13 @@
                                         <th>Username</th>
                                         <th>Email</th>
                                         <th>Listings</th>
-                                        <th>Bookings</th>
-                                        <th>Bills</th>
-                                        <th>Reviews</th>
                                     </tr>
                                 </thead>
                                 <tbody>`;
+                                    // below username, email, listings, 
+                                    // <th>Bookings</th>
+                                    //     <th>Bills</th>
+                                    //     <th>Reviews</th>
             if (owners.length > 0) {
                 owners.forEach(owner => {
                     tableHtml += `<tr>
@@ -260,12 +261,15 @@
                                     <td>`;
                     if (owner.Listings && owner.Listings.length > 0) {
                         owner.Listings.forEach(listing => {
-                            tableHtml += `<div class="card mb-2"><img src="${listing.image}" class="card-img-top" alt="Listing Image" style="height: 100px; object-fit: cover;"><div class="card-body"><h6 class="card-title">${listing.title}</h6><p class="card-text">Price: ${listing.price}, Location: ${listing.location}, Country: ${listing.country}</p></div></div>`;
+                            const createdDate = new Date(listing.createdAt).toLocaleDateString();
+                            const createdTime = new Date(listing.createdAt).toLocaleTimeString();
+                            tableHtml += `<div class="card mb-2"><img src="${listing.image}" class="card-img-top" alt="Listing Image" style="height: 100px; object-fit: cover;"><div class="card-body"><h6 class="card-title">${listing.title}</h6><p class="card-text">Price: ${listing.price}, Location: ${listing.location}, Country: ${listing.country}, Status: ${listing.status}<br><small class="text-muted">Created on: ${createdDate} at ${createdTime}</small></p></div></div>`;
                         });
                     } else {
                         tableHtml += `<p>No listings</p>`;
                     }
                     tableHtml += `</td><td>`;
+                    /*
                     if (owner.Bookings && owner.Bookings.length > 0) {
                         owner.Bookings.forEach(booking => {
                             tableHtml += `<p>Listing: ${booking.Listing.title}, Start: ${new Date(booking.startDate).toLocaleDateString()}, End: ${new Date(booking.endDate).toLocaleDateString()}</p>`;
@@ -290,7 +294,9 @@
                         tableHtml += `<p>No reviews</p>`;
                     }
                     tableHtml += `</td></tr>`;
+                    */
                 });
+                
             } else {
                 tableHtml += `<tr><td colspan="6">No owners found.</td></tr>`;
             }
@@ -318,7 +324,15 @@
                                     <td>`;
                     if (customer.Bookings && customer.Bookings.length > 0) {
                         customer.Bookings.forEach(booking => {
-                            tableHtml += `<p>Listing: ${booking.Listing.title}, Start: ${new Date(booking.startDate).toLocaleDateString()}, End: ${new Date(booking.endDate).toLocaleDateString()}</p>`;
+                            tableHtml += `<p>Listing: ${booking.Listing.title}, Start: ${new Date(booking.startDate).toLocaleDateString('en-GB', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric'
+                            })}, End: ${new Date(booking.endDate).toLocaleDateString('en-GB', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric'
+                            })}</p>`;
                         });
                     } else {
                         tableHtml += `<p>No bookings</p>`;
@@ -326,7 +340,11 @@
                     tableHtml += `</td><td>`;
                     if (customer.Bills && customer.Bills.length > 0) {
                         customer.Bills.forEach(bill => {
-                            tableHtml += `<p>Amount: ${bill.amount}, Due Date: ${new Date(bill.dueDate).toLocaleDateString()}</p>`;
+                            tableHtml += `<p>Amount: ${bill.amount}, Due Date: ${new Date(bill.dueDate).toLocaleDateString('en-GB', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric'
+                            })}</p>`;
                         });
                     } else {
                         tableHtml += `<p>No bills</p>`;
@@ -334,7 +352,7 @@
                     tableHtml += `</td><td>`;
                     if (customer.Reviews && customer.Reviews.length > 0) {
                         customer.Reviews.forEach(review => {
-                            tableHtml += `<p>Rating: ${review.rating}, Comment: ${review.comment}</p>`;
+                            tableHtml += `<p>Rating: ${review.rating}, Comment: ${review.comment} <br> <hr> Listing: ${review.Listing ? review.Listing.title : 'N/A'}</p>`;
                         });
                     } else {
                         tableHtml += `<p>No reviews</p>`;

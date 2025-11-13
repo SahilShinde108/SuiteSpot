@@ -16,7 +16,7 @@ const { Op } = require('sequelize');
 
 module.exports = {
     index: async (req, res) => {
-        const { startDate, endDate, city, festivalName, nearestLocation } = req.query;
+        const { startDate, endDate, city, festivalName, nearestLocation, minPrice, maxPrice, guestCount } = req.query;
         let allListings;
         
         const whereClause = {
@@ -40,6 +40,20 @@ module.exports = {
             ];
         }
 
+        if (minPrice || maxPrice) {
+            whereClause.price = {};
+            if (minPrice) {
+                whereClause.price[Op.gte] = parseFloat(minPrice);
+            }
+            if (maxPrice) {
+                whereClause.price[Op.lte] = parseFloat(maxPrice);
+            }
+        }
+
+        if (guestCount) {
+            whereClause.capacity = { [Op.gte]: parseInt(guestCount) };
+        }
+
         let orderClause = [];
         if (nearestLocation) {
             orderClause = [
@@ -53,48 +67,37 @@ module.exports = {
             ];
         }
 
+        if (startDate && endDate) {
+            const [dayS, monthS, yearS] = startDate.split('-');
+            const parsedStartDate = new Date(Date.UTC(yearS, monthS - 1, dayS));
+
+            const [dayE, monthE, yearE] = endDate.split('-');
+            const parsedEndDate = new Date(Date.UTC(yearE, monthE - 1, dayE));
+
+            const bookedListingIds = await Booking.findAll({
+                attributes: ['listingId'],
+                where: {
+                    status: 'confirmed',
+                    [Op.and]: [
+                        { startDate: { [Op.lte]: parsedEndDate } },
+                        { endDate: { [Op.gte]: parsedStartDate } }
+                    ]
+                },
+                raw: true
+            }).then(bookings => bookings.map(b => b.listingId));
+
+            if (bookedListingIds.length > 0) {
+                whereClause.id = { [Op.notIn]: bookedListingIds };
+            }
+        }
+
         allListings = await Listing.findAll({
             where: whereClause,
             order: orderClause
         });
-
-        if (startDate && endDate) {
-            const availableListings = [];
-            for (const listing of allListings) {
-                const overlappingBooking = await Booking.findOne({
-                    where: {
-                        listingId: listing.id,
-                        status: 'confirmed',
-                        [Op.or]: [
-                            {
-                                startDate: {
-                                    [Op.between]: [startDate, endDate]
-                                }
-                            },
-                            {
-                                endDate: {
-                                    [Op.between]: [startDate, endDate]
-                                }
-                            },
-                            {
-                                [Op.and]: [
-                                    { startDate: { [Op.lte]: startDate } },
-                                    { endDate: { [Op.gte]: endDate } }
-                                ]
-                            }
-                        ]
-                    }
-                });
-
-                if (!overlappingBooking) {
-                    availableListings.push(listing);
-                }
-            }
-            allListings = availableListings;
-        }
             
         const cities = [...new Set((await Listing.findAll({ attributes: ['location'], raw: true })).map(l => l.location.split(',')[0].trim()))];
-        const festivals = [...new Set((await Listing.findAll({ attributes: ['festivalName'], raw: true })).map(l => l.festivalName))];
+        const festivals = [...new Set((await Listing.findAll({ attributes: ['festivalName'], raw: true })).map(l => l.festivalName).filter(name => name && name.trim() !== ''))];
         
         const nearestLocations = [...new Set(
             (await Listing.findAll({ attributes: ['nearestLocation1', 'nearestLocation2', 'nearestLocation3', 'nearestLocation4'], raw: true }))
@@ -205,10 +208,10 @@ module.exports = {
         const { searchOwner, searchCustomer, tab } = req.query;
         let allUsers = await User.findAll({
             include: [
-                { model: Listing, as: 'Listings' }, // Include listings owned by the user
-                { model: Booking, as: 'Bookings', include: [Listing, { model: User, as: 'guest' }] }, // Include bookings made by the user
-                { model: Bill, as: 'Bills', include: [{ model: Booking, include: [Listing] }] }, // Include bills associated with the user
-                { model: Review, as: 'Reviews' } // Include reviews written by the user
+                { model: Listing, as: 'Listings', attributes: ['id', 'title', 'price', 'location', 'country', 'image', 'createdAt', 'status'] }, // Include createdAt and status
+                { model: Booking, as: 'Bookings', include: [Listing, { model: User, as: 'guest' }] },
+                { model: Bill, as: 'Bills', include: [{ model: Booking, include: [Listing] }] },
+                { model: Review, as: 'Reviews', include: [Listing] } // Include Listing with Review
             ]
         });
         let allBookings = await Booking.findAll({

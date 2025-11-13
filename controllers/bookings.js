@@ -41,13 +41,23 @@ module.exports = {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         const totalPrice = diffDays * listing.price;
 
-        // Check if user already has a booking
+        // Check if user already has a booking that overlaps with the new booking dates
         const existingUserBooking = await Booking.findOne({
-            where: { guestId: guestId }
+            where: {
+                guestId: guestId,
+                [Op.or]: [
+                    { startDate: { [Op.between]: [startDate, endDate] } },
+                    { endDate: { [Op.between]: [startDate, endDate] } },
+                    { [Op.and]: [
+                        { startDate: { [Op.lte]: startDate } },
+                        { endDate: { [Op.gte]: endDate } }
+                    ]}
+                ]
+            }
         });
 
         if (existingUserBooking) {
-            req.flash("error", "You can only have one active booking at a time.");
+            req.flash("error", "You already have a booking during these dates.");
             return res.redirect(`/listings/${listingId}`);
         }
 
