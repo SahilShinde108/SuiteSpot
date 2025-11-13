@@ -7,8 +7,7 @@ const Booking = sequelize.define('Booking', {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
-    
-    // REPLACED expiresAt with startDate and endDate
+
     startDate: {
         type: DataTypes.DATE,
         allowNull: false
@@ -34,4 +33,3 @@ const Booking = sequelize.define('Booking', {
 });
 
 module.exports = Booking;
-

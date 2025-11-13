@@ -4,9 +4,9 @@ const sequelize = require('../database');
 const User = sequelize.define('User', {
     // --- THIS IS THE NEW PART ---
     id: {
-        type: DataTypes.UUID,          // Set the data type to UUID
-        defaultValue: DataTypes.UUIDV4, // Automatically generate a UUID
-        primaryKey: true               // Mark it as the primary key
+        type: DataTypes.UUID,      
+        defaultValue: DataTypes.UUIDV4, 
+        primaryKey: true               
     },
     // --- END OF NEW PART ---
     email: {

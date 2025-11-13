@@ -24,4 +24,3 @@ const Review = sequelize.define('Review', {
 });
 
 module.exports = Review;
-

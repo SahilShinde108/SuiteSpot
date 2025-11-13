@@ -87,4 +87,3 @@ const Listing = sequelize.define('Listing', {
 });
 
 module.exports = Listing;
-
