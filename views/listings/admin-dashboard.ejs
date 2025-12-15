@@ -3,6 +3,12 @@
     <div class="col-10 offset-1">
         <h3>Admin Dashboard</h3>
 
+        <div class="mb-3">
+            <a href="/listings/admin/export/listings" class="btn btn-success me-2">Export Listings (CSV)</a>
+            <a href="/listings/admin/export/bookings" class="btn btn-success me-2">Export Bookings (CSV)</a>
+            <a href="/listings/admin/export/users" class="btn btn-success">Export Users (CSV)</a>
+        </div>
+
         <ul class="nav nav-tabs mb-3" id="adminTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="pending" aria-selected="true">Pending (<%= pendingListings.length %>)</button>

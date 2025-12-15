@@ -262,5 +262,38 @@ module.exports = {
             allBookings,
             query: req.query
         });
+    },
+
+    exportListings: async (req, res) => {
+        const { Parser } = require('json2csv');
+        const listings = await Listing.findAll({ raw: true });
+        const fields = ['id', 'title', 'description', 'image', 'price', 'location', 'country', 'capacity', 'festivalName', 'startDate', 'endDate', 'status', 'ownerId', 'createdAt', 'updatedAt'];
+        const json2csvParser = new Parser({ fields });
+        const csv = json2csvParser.parse(listings);
+        res.header('Content-Type', 'text/csv');
+        res.attachment('listings.csv');
+        return res.send(csv);
+    },
+
+    exportBookings: async (req, res) => {
+        const { Parser } = require('json2csv');
+        const bookings = await Booking.findAll({ raw: true });
+        const fields = ['id', 'startDate', 'endDate', 'totalPrice', 'status', 'listingId', 'guestId', 'createdAt', 'updatedAt'];
+        const json2csvParser = new Parser({ fields });
+        const csv = json2csvParser.parse(bookings);
+        res.header('Content-Type', 'text/csv');
+        res.attachment('bookings.csv');
+        return res.send(csv);
+    },
+
+    exportUsers: async (req, res) => {
+        const { Parser } = require('json2csv');
+        const users = await User.findAll({ raw: true });
+        const fields = ['id', 'username', 'email', 'role', 'createdAt', 'updatedAt'];
+        const json2csvParser = new Parser({ fields });
+        const csv = json2csvParser.parse(users);
+        res.header('Content-Type', 'text/csv');
+        res.attachment('users.csv');
+        return res.send(csv);
     }
 };

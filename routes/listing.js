@@ -49,6 +49,11 @@ router.patch("/:id/status", isLoggedIn, isAdmin, wrapAsync(listingController.upd
 // New route for admin dashboard
 router.get("/admin/dashboard", isLoggedIn, isAdmin, wrapAsync(listingController.adminDashboard));
 
+// Export Routes
+router.get("/admin/export/listings", isLoggedIn, isAdmin, wrapAsync(listingController.exportListings));
+router.get("/admin/export/bookings", isLoggedIn, isAdmin, wrapAsync(listingController.exportBookings));
+router.get("/admin/export/users", isLoggedIn, isAdmin, wrapAsync(listingController.exportUsers));
+
 // Route to show the "edit listing" form
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
